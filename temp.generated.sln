@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.002.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{584B9984-F102-43F2-9DBE-259474C5F967}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NADR.Cli", "src\NADR.Cli\NADR.Cli.csproj", "{BCC7B945-250D-409D-952F-415F0BC4C211}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NADR.Domain", "src\NADR.Domain\NADR.Domain.csproj", "{1EE4735C-E96B-4FE6-8A3D-C562FACAAD18}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BCC7B945-250D-409D-952F-415F0BC4C211}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BCC7B945-250D-409D-952F-415F0BC4C211}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BCC7B945-250D-409D-952F-415F0BC4C211}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BCC7B945-250D-409D-952F-415F0BC4C211}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1EE4735C-E96B-4FE6-8A3D-C562FACAAD18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1EE4735C-E96B-4FE6-8A3D-C562FACAAD18}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1EE4735C-E96B-4FE6-8A3D-C562FACAAD18}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1EE4735C-E96B-4FE6-8A3D-C562FACAAD18}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{BCC7B945-250D-409D-952F-415F0BC4C211} = {584B9984-F102-43F2-9DBE-259474C5F967}
+		{1EE4735C-E96B-4FE6-8A3D-C562FACAAD18} = {584B9984-F102-43F2-9DBE-259474C5F967}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {26800C01-E046-4533-B029-8E22C3E033F3}
+	EndGlobalSection
+EndGlobal
