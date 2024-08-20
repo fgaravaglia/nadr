@@ -1,4 +1,4 @@
-using System.Globalization;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Text;
 using Microsoft.Extensions.Configuration;
@@ -11,6 +11,7 @@ namespace NADR.Cli
     /// <summary>
     /// class to implement the task of cli
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public class CliRunnableTask
     {
         #region Fields
@@ -80,40 +81,25 @@ namespace NADR.Cli
         public KeyValuePair<bool, string> Run()
         {
             string methodName = this.GetType().Name + "." + nameof(Run);
-            this._Logger.LogInformation(methodName + " Start");
+            this._Logger.LogInformation("{0}: {1} Start", nameof(CliRunnableTask), methodName);
             try
             {
                 // Parsing Arguments
                 var cmd = ParseArgumentsIntoCommand();
 
-                // create folder tree
-                var adrRootPath = Path.Combine(cmd.Repository, "docs", "adr");
-                if (!Directory.Exists(adrRootPath))
-                {
-                    this._Logger.LogInformation("Creating target folder for ADR: /docs/adr");
-                    Directory.CreateDirectory(adrRootPath);
-                }
-
-                // calculating the progressive
-                var adrRootDirectory = new DirectoryInfo(adrRootPath);
-                cmd.Progressive = _Service.CalculateNextRecordId(adrRootPath);
-
-                // Creating new item from template
-                CopyFromTemplate(cmd, adrRootPath);
-
-                // update registry
-                AddNewRecordToRegistry(cmd, adrRootPath);
-
+                var id = this._Service.AddNewRecordToRegistry(cmd.ShortName, cmd.Repository, cmd.TemplateName);
+                this._Logger.LogInformation("Record {RecordId} succesfully created", id);
                 return new KeyValuePair<bool, string>(true, "");
             }
             catch (Exception ex)
             {
-                this._Logger.LogError(ex, "Unexpected error during running task {0}: {1}", this.GetType().Name, ex.Message);
+
+                this._Logger.LogError(ex, "{0}: {1} Failed! {2}", this.GetType().Name, methodName, ex.Message);
                 return new KeyValuePair<bool, string>(false, ex.Message);
             }
             finally
             {
-                this._Logger.LogInformation(methodName + " End");
+                this._Logger.LogInformation("{0}: {1} End", nameof(CliRunnableTask), methodName);
             }
         }
 
@@ -147,48 +133,6 @@ namespace NADR.Cli
             if (String.IsNullOrEmpty(cmd.TemplateName))
                 throw new InvalidOperationException($"[Wrong Usage] Tempalte Name not set (Option: -t)");
             return cmd;
-        }
-
-        int CalculateNextRecordId(string adrRootPath)
-        {
-            // calculating the progressive
-            var adrRootDirectory = new DirectoryInfo(adrRootPath);
-            var foldersNames = adrRootDirectory.GetDirectories().Select(x => x.Name).OrderBy(x => x);
-            if (!foldersNames.Any())
-                return 1;
-
-            // take last and extract the id
-            var laststringProgressive = foldersNames.Last().Split('-').FirstOrDefault() ?? "0000";
-            int progressive;
-            if (Int32.TryParse(laststringProgressive, out progressive))
-                return progressive + 1;
-            else
-                throw new InvalidOperationException("Unable to calculate new record progressive id");
-        }
-
-        void CopyFromTemplate(AddNewRecordCommand cmd, string adrRootPath)
-        {
-            // preparing folder
-            string folderName = cmd.Progressive?.ToString("0000") + "-" + cmd.ShortName;
-            this._Logger.LogInformation("Creating target folder for record: {targetRecordFolder}", folderName);
-            Directory.CreateDirectory(Path.Combine(adrRootPath, folderName));
-
-            // copying template
-            this._Logger.LogInformation("Copying template {Template} to create new record", folderName);
-            File.Copy(Path.Combine(cmd.Repository, "templates", "adr", cmd.TemplateName),
-                        Path.Combine(adrRootPath, folderName, folderName + ".md"));
-            Directory.CreateDirectory(Path.Combine(adrRootPath, folderName, "img"));
-
-        }
-
-        void AddNewRecordToRegistry(AddNewRecordCommand cmd, string adrRootPath)
-        {
-            StringBuilder newRow = new StringBuilder();
-            //Progressive; short name; Creation Date;
-            newRow.Append(cmd.Progressive?.ToString("0000") ?? "").Append(";");
-            newRow.Append(cmd.ShortName).Append(";");
-            newRow.Append(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture));
-            File.AppendAllLines(Path.Combine(adrRootPath, "adr.csv"), new string[] { newRow.ToString() });
         }
         #endregion
     }

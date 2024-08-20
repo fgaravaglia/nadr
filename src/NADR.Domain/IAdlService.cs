@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using NADR.Domain.Models;
 
 namespace NADR.Domain
 {
@@ -16,5 +17,10 @@ namespace NADR.Domain
         /// <param name="adrRootPath"></param>
         /// <returns></returns>
         int CalculateNextRecordId(string adrRootPath);
+        /// <summary>
+        /// Creates a new record
+        /// </summary>
+        int AddNewRecordToRegistry(string shortName, string repoRootPath, string templateName);
+
     }
 }
