@@ -6,10 +6,10 @@ These documents have names that are short noun phrases. For example, "Deployment
 
 | **Attribute**     | **Value** |
 | :-----------------| :------: |
-| Status            |   Proposed |
-| Group             |   TBD |
-| Creation Date     |   $(Today) |
-| Current Version   |   1 |
+| Status            | Proposed |
+| Group             | TBD |
+| Creation Date     | $(Today) |
+| Current Version   | 1 |
 
 **Status**: A decision may be "proposed" if the project stakeholders haven't agreed with it yet, or "accepted" once it is agreed. If a later ADR changes or reverses a decision, it may be marked as "deprecated" or "superseded" with a reference to its replacement
 **Group**: You can use a simple grouping—such as integration, presentation, data, and so on—to help organize the set of decisions

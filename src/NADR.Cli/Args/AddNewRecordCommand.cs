@@ -6,7 +6,7 @@ namespace NADR.Cli.Args
     /// 
     /// </summary>
     [ExcludeFromCodeCoverage]
-    public class AddNewRecordCommand
+    public class AddNewRecordCommand : CliCommand
     {
         /// <summary>
         /// if sspecificed, the ID to assign to new record.
@@ -16,10 +16,7 @@ namespace NADR.Cli.Args
         /// Short Name of new record. it is used to generate base file name for record files
         /// </summary>
         public string ShortName { get; set; }
-        /// <summary>
-        /// full path of Code repository, to store the ADR
-        /// </summary>
-        public string Repository { get; set; }
+
         /// <summary>
         /// name of tempalte stored in $(Root)\templates\adr
         /// </summary>
@@ -30,7 +27,6 @@ namespace NADR.Cli.Args
         public AddNewRecordCommand()
         {
             this.ShortName = "";
-            this.Repository = "";
             this.TemplateName = "garavaglia.md";
         }
     }

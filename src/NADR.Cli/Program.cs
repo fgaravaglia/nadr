@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Serilog;
 using System.Diagnostics;
 using NADR.Domain;
+using NADR.Cli.Args;
 
 Activity.DefaultIdFormat = ActivityIdFormat.W3C;
 
@@ -26,8 +27,9 @@ try
     Log.Logger.Information("instancing the target task and run it...");
     var logger = host.Services.GetRequiredService<Microsoft.Extensions.Logging.ILogger>();
     var config = host.Services.GetRequiredService<IConfiguration>();
+    var parser = host.Services.GetRequiredService<ICliArgumentParser>();
     var service = host.Services.GetRequiredService<IAdlService>();
-    var task = new CliRunnableTask(logger, config, service);
+    var task = new CliRunnableTask(logger, config, parser, service);
     task.PrintSplashScreen();
     task.ReadEnvironmentVariables();
     // args = new string[]

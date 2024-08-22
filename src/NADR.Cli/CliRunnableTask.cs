@@ -17,14 +17,16 @@ namespace NADR.Cli
         #region Fields
         protected readonly ILogger _Logger;
         protected readonly IConfiguration _Config;
+        readonly ICliArgumentParser _ArgumentParser;
         readonly IAdlService _Service;
         protected List<string> _Arguments;
         #endregion
 
-        public CliRunnableTask(ILogger logger, IConfiguration config, IAdlService service)
+        public CliRunnableTask(ILogger logger, IConfiguration config, ICliArgumentParser argParser, IAdlService service)
         {
             this._Logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this._Config = config ?? throw new ArgumentNullException(nameof(config));
+            this._ArgumentParser = argParser ?? throw new ArgumentNullException(nameof(argParser));
             this._Service = service ?? throw new ArgumentNullException(nameof(service));
             this._Arguments = new List<string>();
         }
@@ -85,10 +87,23 @@ namespace NADR.Cli
             try
             {
                 // Parsing Arguments
-                var cmd = ParseArgumentsIntoCommand();
+                var cmd = this._ArgumentParser.ParseCommand(this._Arguments.ToArray());
+                switch (cmd.GetType().Name)
+                {
+                    case nameof(AddNewRecordCommand):
+                        AddNewRecordCommand addCmd = (AddNewRecordCommand)cmd;
+                        var id = this._Service.AddNewRecordToRegistry(addCmd.ShortName, addCmd.Repository, addCmd.TemplateName);
+                        this._Logger.LogInformation("Record {RecordId} succesfully created", id);
+                        break;
+                    case nameof(ApproveRecordCommand):
+                        ApproveRecordCommand approveCmd = (ApproveRecordCommand)cmd;
+                        this._Service.ApproveRecord(approveCmd.Progressive, approveCmd.Repository);
+                        this._Logger.LogInformation("Record {RecordId} succesfully approved", approveCmd.Progressive);
+                        break;
+                    default:
+                        throw new NotImplementedException($"Command {cmd.GetType().Name} unknown");
+                }
 
-                var id = this._Service.AddNewRecordToRegistry(cmd.ShortName, cmd.Repository, cmd.TemplateName);
-                this._Logger.LogInformation("Record {RecordId} succesfully created", id);
                 return new KeyValuePair<bool, string>(true, "");
             }
             catch (Exception ex)
@@ -103,37 +118,5 @@ namespace NADR.Cli
             }
         }
 
-        #region Private Methods
-
-        AddNewRecordCommand ParseArgumentsIntoCommand()
-        {
-            if (!this._Arguments.Any())
-                throw new InvalidOperationException("[Wrong Usage] No Argument provided");
-            AddNewRecordCommand cmd = new AddNewRecordCommand();
-            foreach (var arg in this._Arguments)
-            {
-                var option = arg.Split('=').First().Replace("-", "");
-                var value = arg.Split('=').Last();
-                switch (option.ToLower())
-                {
-                    case "r":
-                        cmd.Repository = value;
-                        break;
-                    case "n":
-                        cmd.ShortName = value;
-                        break;
-                    default:
-                        throw new InvalidOperationException($"[Wrong Usage] Option {option} not supported!");
-                }
-            }
-            if (String.IsNullOrEmpty(cmd.Repository))
-                throw new InvalidOperationException($"[Wrong Usage] Repository root folder not set (Option: -r)");
-            if (String.IsNullOrEmpty(cmd.ShortName))
-                throw new InvalidOperationException($"[Wrong Usage] Short Name not set (Option: -n)");
-            if (String.IsNullOrEmpty(cmd.TemplateName))
-                throw new InvalidOperationException($"[Wrong Usage] Tempalte Name not set (Option: -t)");
-            return cmd;
-        }
-        #endregion
     }
 }

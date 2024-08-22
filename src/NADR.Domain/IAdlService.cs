@@ -21,6 +21,24 @@ namespace NADR.Domain
         /// Creates a new record
         /// </summary>
         int AddNewRecordToRegistry(string shortName, string repoRootPath, string templateName);
-
+        /// <summary>
+        /// approves the record
+        /// </summary>
+        /// <param name="progressive"></param>
+        /// <param name="repoRootPath"></param>
+        void ApproveRecord(int progressive, string repoRootPath);
+        /// <summary>
+        /// deprecates the record
+        /// </summary>
+        /// <param name="progressive"></param>
+        /// <param name="repoRootPath"></param>
+        void DeprecateRecord(int progressive, string repoRootPath);
+        /// <summary>
+        /// Superseds the record
+        /// </summary>
+        /// <param name="progressive"></param>
+        /// <param name="repoRootPath"></param>
+        /// <param name="replacingProgressive">
+        void SupersedRecord(int progressive, string repoRootPath, int replacingProgressive);
     }
 }

@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace NADR.Domain.Models
 {
@@ -10,8 +6,34 @@ namespace NADR.Domain.Models
     /// Model to map a specific record
     /// </summary>
     [ExcludeFromCodeCoverage]
-    public class Record
+    public class Record : IRegistryRecord
     {
+        #region Used Types
+
+        /// <summary>
+        /// Status of record
+        /// </summary>
+        public enum StatusEnum
+        {
+            /// <summary>
+            /// 
+            /// </summary>
+            Proposed = 0,
+            /// <summary>
+            /// 
+            /// </summary>
+            Accepted = 1,
+            /// <summary>
+            /// 
+            /// </summary>
+            Deprecated = 2,
+            /// <summary>
+            /// 
+            /// </summary>
+            Superseded = 3
+        }
+        #endregion
+
         /// <summary>
         /// if sspecificed, the ID to assign to new record.
         /// </summary>
@@ -31,11 +53,31 @@ namespace NADR.Domain.Models
         /// <summary>
         /// 
         /// </summary>
+        public StatusEnum Status { get; set; }
+        /// <summary>
+        /// /
+        /// </summary>
+        public DateTime CreatedOn { get; set; }
+        /// <summary>
+        /// <inheritdoc />>
+        /// </summary>
+        public List<string> Links { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public int CurrentVersion { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public Record()
         {
             this.ShortName = "";
             this.Repository = "";
             this.TemplateName = "garavaglia.md";
+            this.Status = Record.StatusEnum.Proposed;
+            this.Links = new List<string>();
+            this.CurrentVersion = 1;
         }
     }
 }

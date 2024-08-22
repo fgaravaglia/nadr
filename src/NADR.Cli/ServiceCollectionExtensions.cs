@@ -5,7 +5,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using NADR.Cli.Args;
 using NADR.Domain;
+using NADR.Domain.Infrastructure;
 using Serilog;
 
 namespace NADR.Cli
@@ -30,6 +32,8 @@ namespace NADR.Cli
             services.AddLogging();
 
             // add here your dependencies
+            services.AddTransient<ICliArgumentParser, CliArgumentParser>();
+            services.AddTransient<IRecordRegistryRepositoryFactory, RecordRegistryRepositoryFactory>();
             services.AddTransient<IAdlService, AdlService>();
 
             return services;
