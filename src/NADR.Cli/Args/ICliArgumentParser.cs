@@ -24,6 +24,10 @@ namespace NADR.Cli.Args
                 return ParseArgumentsIntoAddNewRecordCommand(args.ToList());
             else if (args[0].ToLower() == "approve")
                 return ParseArgumentsIntoApproveRecordCommand(args.ToList());
+            else if (args[0].ToLower() == "deprecate")
+                return ParseArgumentsIntoDeprecateRecordCommand(args.ToList());
+            else if (args[0].ToLower() == "supersed")
+                return ParseArgumentsIntoSupersedRecordCommand(args.ToList());
             else
                 throw new NotImplementedException($"Command {args[0].ToLower()} unknown");
         }
@@ -84,6 +88,62 @@ namespace NADR.Cli.Args
             return cmd;
         }
 
+        DeprecateRecordCommand ParseArgumentsIntoDeprecateRecordCommand(IEnumerable<string> args)
+        {
+            DeprecateRecordCommand cmd = new DeprecateRecordCommand();
+            foreach (var arg in args.Skip(1))
+            {
+                var option = arg.Split('=').First().Replace("-", "");
+                var value = arg.Split('=').Last();
+                switch (option.ToLower())
+                {
+                    case "r":
+                        cmd.Repository = value;
+                        break;
+                    case "p":
+                        cmd.Progressive = Int32.Parse(value);
+                        break;
+                    default:
+                        throw new InvalidOperationException($"[Wrong Usage] Option {option} not supported!");
+                }
+            }
+            if (String.IsNullOrEmpty(cmd.Repository))
+                throw new InvalidOperationException($"[Wrong Usage] Repository root folder not set (Option: -r)");
+            if (cmd.Progressive <= 0)
+                throw new InvalidOperationException($"[Wrong Usage] Progressive not set (Option: -p)");
+            return cmd;
+        }
+
+        SupersedRecordCommand ParseArgumentsIntoSupersedRecordCommand(IEnumerable<string> args)
+        {
+            SupersedRecordCommand cmd = new SupersedRecordCommand();
+            foreach (var arg in args.Skip(1))
+            {
+                var option = arg.Split('=').First().Replace("-", "");
+                var value = arg.Split('=').Last();
+                switch (option.ToLower())
+                {
+                    case "r":
+                        cmd.Repository = value;
+                        break;
+                    case "p":
+                        cmd.Progressive = Int32.Parse(value);
+                        break;
+                    case "n":
+                        cmd.ReplacingId = Int32.Parse(value);
+                        break;
+                    default:
+                        throw new InvalidOperationException($"[Wrong Usage] Option {option} not supported!");
+                }
+            }
+            if (String.IsNullOrEmpty(cmd.Repository))
+                throw new InvalidOperationException($"[Wrong Usage] Repository root folder not set (Option: -r)");
+            if (cmd.Progressive <= 0)
+                throw new InvalidOperationException($"[Wrong Usage] Progressive not set (Option: -p)");
+            if (cmd.ReplacingId <= 0)
+                throw new InvalidOperationException($"[Wrong Usage] Replacing Id not set (Option: -n)");
+            return cmd;
+        }
         #endregion
     }
 }

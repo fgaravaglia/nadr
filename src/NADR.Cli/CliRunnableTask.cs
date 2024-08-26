@@ -100,6 +100,16 @@ namespace NADR.Cli
                         this._Service.ApproveRecord(approveCmd.Progressive, approveCmd.Repository);
                         this._Logger.LogInformation("Record {RecordId} succesfully approved", approveCmd.Progressive);
                         break;
+                    case nameof(DeprecateRecordCommand):
+                        DeprecateRecordCommand deprecateCmd = (DeprecateRecordCommand)cmd;
+                        this._Service.DeprecateRecord(deprecateCmd.Progressive, deprecateCmd.Repository);
+                        this._Logger.LogInformation("Record {RecordId} succesfully deprecated", deprecateCmd.Progressive);
+                        break;
+                    case nameof(SupersedRecordCommand):
+                        SupersedRecordCommand supersedCmd = (SupersedRecordCommand)cmd;
+                        this._Service.SupersedRecord(supersedCmd.Progressive, supersedCmd.Repository, supersedCmd.ReplacingId);
+                        this._Logger.LogInformation("Record {RecordId} succesfully supeseded by {newRecordId}", supersedCmd.Progressive, supersedCmd.ReplacingId);
+                        break;
                     default:
                         throw new NotImplementedException($"Command {cmd.GetType().Name} unknown");
                 }

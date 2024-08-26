@@ -100,12 +100,12 @@ public class AdlService : IAdlService
 
         // read content and update text
         var text = File.ReadAllText(mdFilePath);
-        text.Replace("| Proposed |", $"|{record.Status}|");
-        text.Replace($"| {Record.StatusEnum.Proposed.ToString()} |", $"|{record.Status}|");
-        text.Replace($"| {Record.StatusEnum.Accepted.ToString()} |", $"|{record.Status}|");
-        text.Replace($"| {Record.StatusEnum.Deprecated.ToString()} |", $"|{record.Status}|");
-        text.Replace($"| {Record.StatusEnum.Superseded.ToString()} |", $"|{record.Status}|");
+        text = text.Replace($"| {Record.StatusEnum.Proposed.ToString()} |", $"| {record.Status} |")
+                    .Replace($"| {Record.StatusEnum.Accepted.ToString()} |", $"| {record.Status} |")
+                    .Replace($"| {Record.StatusEnum.Deprecated.ToString()} |", $"| {record.Status} |")
+                    .Replace($"| {Record.StatusEnum.Superseded.ToString()} |", $"| {record.Status} |");
         File.WriteAllText(mdFilePath, text);
+        this._Logger.LogInformation("File {FileName} succesfully saved", mdFilePath);
     }
     #endregion
 
