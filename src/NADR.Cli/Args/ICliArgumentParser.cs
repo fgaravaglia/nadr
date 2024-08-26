@@ -1,3 +1,5 @@
+using System.Text;
+
 namespace NADR.Cli.Args
 {
     /// <summary>
@@ -10,12 +12,12 @@ namespace NADR.Cli.Args
         /// </summary>
         /// <param name="args"></param>
         /// <returns></returns>
-        CliCommand ParseCommand(string[] args);
+        CliCommand? ParseCommand(string[] args);
     }
 
     public class CliArgumentParser : ICliArgumentParser
     {
-        public CliCommand ParseCommand(string[] args)
+        public CliCommand? ParseCommand(string[] args)
         {
             if (!args.Any())
                 throw new InvalidOperationException("[Wrong Usage] No Argument provided");
@@ -28,6 +30,33 @@ namespace NADR.Cli.Args
                 return ParseArgumentsIntoDeprecateRecordCommand(args.ToList());
             else if (args[0].ToLower() == "supersed")
                 return ParseArgumentsIntoSupersedRecordCommand(args.ToList());
+            else if (args[0].ToLower() == "help")
+            {
+                StringBuilder usage = new StringBuilder();
+                usage.AppendLine();
+                usage.AppendLine("***************************************************************");
+                usage.AppendLine("\tUsage of CLI");
+                usage.AppendLine("***************************************************************");
+                usage.AppendLine("new\t\tCreates a new record");
+                usage.AppendLine("\t-r\tSpecify the root folder of Git Repository");
+                usage.AppendLine("\t-n\tSpecify the short name to generate proper .md file and folders");
+                usage.AppendLine();
+                usage.AppendLine("approve\t\tApproves an existing record");
+                usage.AppendLine("\t-r\tSpecify the root folder of Git Repository");
+                usage.AppendLine("\t-p\tSpecify the target record id");
+                usage.AppendLine();
+                usage.AppendLine("decrecate\tDeprecates an existing record");
+                usage.AppendLine("\t-r\tSpecify the root folder of Git Repository");
+                usage.AppendLine("\t-p\tSpecify the target record id");
+                usage.AppendLine();
+                usage.AppendLine("supersed\tSuperseds an existing record");
+                usage.AppendLine("\t-r\tSpecify the root folder of Git Repository");
+                usage.AppendLine("\t-p\tSpecify the target record id");
+                usage.AppendLine("\t-n\tSpecify the id of record that replace the target ones");
+
+                Console.WriteLine(usage.ToString());
+                return null;
+            }
             else
                 throw new NotImplementedException($"Command {args[0].ToLower()} unknown");
         }

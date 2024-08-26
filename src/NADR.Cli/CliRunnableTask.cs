@@ -88,6 +88,9 @@ namespace NADR.Cli
             {
                 // Parsing Arguments
                 var cmd = this._ArgumentParser.ParseCommand(this._Arguments.ToArray());
+                if (cmd == null)
+                    return new KeyValuePair<bool, string>(true, "");
+
                 switch (cmd.GetType().Name)
                 {
                     case nameof(AddNewRecordCommand):
@@ -118,7 +121,6 @@ namespace NADR.Cli
             }
             catch (Exception ex)
             {
-
                 this._Logger.LogError(ex, "{0}: {1} Failed! {2}", this.GetType().Name, methodName, ex.Message);
                 return new KeyValuePair<bool, string>(false, ex.Message);
             }
