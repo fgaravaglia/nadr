@@ -20,7 +20,7 @@ namespace NADR.Cli.Args
         public CliCommand? ParseCommand(string[] args)
         {
             if (!args.Any())
-                throw new InvalidOperationException("[Wrong Usage] No Argument provided");
+                throw new InvalidOperationException("[Wrong Usage] No Argument provided. For additional info use 'NADRS.exe help'");
 
             if (args[0].ToLower() == "new")
                 return ParseArgumentsIntoAddNewRecordCommand(args.ToList());

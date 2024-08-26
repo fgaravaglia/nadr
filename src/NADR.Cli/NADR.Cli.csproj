@@ -13,7 +13,7 @@
 
   <PropertyGroup>
     <PackageId>NADR.Cli</PackageId>
-    <Version>0.9.0</Version>
+    <Version>1.0.0</Version>
     <Company>Innova Solutions</Company>
     <Authors>FG</Authors>
     <Description>
@@ -23,6 +23,7 @@
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/fgaravaglia/nadr</RepositoryUrl>
     <PackageReleaseNotes>
+      v1.0.0: released on Sept-2024
     </PackageReleaseNotes>
   </PropertyGroup>
 
